@@ -15,7 +15,7 @@ public abstract class Piece {
     private String pieceID;
     private String imageID;
     private boolean captured;
-    private ArrayList<Spot> possibleMoves = new ArrayList<Spot>();
+    protected ArrayList<Spot> possibleMoves = new ArrayList<Spot>();
 
     public Piece(String pieceID, String pieceColor, String imageID){
         this.pieceID = pieceID;

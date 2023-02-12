@@ -50,11 +50,7 @@ public class Spot extends JPanel{
     public void removePiece(Piece piece){
         this.piece = null;
     }
-
-    public void obtainPiece(Piece piece){
-        this.piece = piece;
-    }
-
+    
     public boolean isValidSpot(){
         return this.isValidSpot;
     }
