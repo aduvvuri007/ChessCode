@@ -16,14 +16,15 @@ public class Spot extends JPanel{
     private Piece piece;
     private boolean isValidSpot, isCheck, isSelected;
 
-    public Spot(int x, int y, Piece piece){
+    public Spot(GridLayout g, int x, int y, Piece piece){
+        super(g);
         this.x = x;
         this.y = y;
 
         if ((x + y) % 2 == 0) {
-            setBackground(new Color(99, 71, 30));
-        } else {
             setBackground(new Color(219, 204, 182));
+        } else {
+            setBackground(new Color(99, 71, 30));;
         }
 
         if (piece != null){
