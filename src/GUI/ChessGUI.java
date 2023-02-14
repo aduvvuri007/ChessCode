@@ -23,7 +23,7 @@ public class ChessGUI extends JFrame{
     public static void main(String[] args){
         ChessGUI window = new ChessGUI();
         window.add(gameboard);
-        window.setBounds(800, 800, 800, 700);
+        window.setBounds(1200, 1200, 1200, 1200);
         window.setDefaultCloseOperation(EXIT_ON_CLOSE);
         window.setVisible(true); 
     }
