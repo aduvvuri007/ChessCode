@@ -65,7 +65,7 @@ public class Pawn extends Piece {
             }
         } else if (x == 7){
             if (board[x-1][y].getPiece() instanceof Pawn){
-                if (((Pawn)board[x+1][y].getPiece()).isTwoSpotMove(x-1, y)){
+                if (((Pawn)board[x-1][y].getPiece()).isTwoSpotMove(x-1, y)){
                     possibleMoves.add(board[x-1][y]);
                 }
             }

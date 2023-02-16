@@ -24,6 +24,8 @@ public abstract class Piece {
     }
 
     public abstract ArrayList<Spot> getPossibleMoves(Spot board[][], int x, int y);
+    
+    public abstract void move(Spot startSpot, Spot endSpot);
 
     public boolean isCaptured(){
         return this.captured;
