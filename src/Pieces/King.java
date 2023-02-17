@@ -12,7 +12,7 @@ public class King extends Piece{
         this.y = y;
     }
 
-    public void move(Spot startSpot, Spot endSpot){
+    public void move(Spot[][] boardState, Spot startSpot, Spot endSpot){
         endSpot.setPiece(this);
         startSpot.removePiece(this);
     }

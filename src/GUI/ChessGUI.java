@@ -8,6 +8,7 @@ public class ChessGUI extends JFrame{
 
     private static JPanel gameboard = new JPanel(new GridLayout(8,8));
     private static Spot[][] board = new Spot[8][8];
+    private static Spot[][] previousBoardState;
 
     public ChessGUI(){
         super("Chess");
@@ -18,6 +19,14 @@ public class ChessGUI extends JFrame{
                 gameboard.add(spot);
             }
         }
+    }
+
+    public static void setPreviousBoardState(Spot[][] boardState){
+        previousBoardState = boardState;
+    }
+
+    public static Spot[][] getPreviousBoardState(){
+        return previousBoardState;
     }
 
     public static void main(String[] args){
