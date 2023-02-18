@@ -29,6 +29,10 @@ public class ChessGUI extends JFrame{
         return previousBoardState;
     }
 
+    public static Spot[][] getCurrentBoardState(){
+        return board;
+    }
+
     public static void main(String[] args){
         ChessGUI window = new ChessGUI();
         window.add(gameboard);
