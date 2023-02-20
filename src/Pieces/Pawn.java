@@ -128,8 +128,9 @@ public class Pawn extends Piece {
             }
         }
 
+        //Accounts for checks
+        Spot[][] copy = ChessGUI.getCopyOfBoardState();
         for(int i = 0; i < possibleMoves.size(); i++){
-            Spot[][] copy = ChessGUI.getCopyOfBoardState();
             move(copy, copy[getStartX()][getStartY()], possibleMoves.get(i));
             if(this.getPieceColor().equals("WHITE")){
                 if(ChessGUI.getKing("WHITE").isInCheck(copy)){
