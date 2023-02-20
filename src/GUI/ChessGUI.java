@@ -2,6 +2,7 @@ package GUI;
 import javax.swing.*;
 import java.awt.*;
 import Game.Spot;
+import Pieces.*;;
 
 
 public class ChessGUI extends JFrame{
@@ -9,6 +10,8 @@ public class ChessGUI extends JFrame{
     private static JPanel gameboard = new JPanel(new GridLayout(8,8));
     private static Spot[][] board = new Spot[8][8];
     private static Spot[][] previousBoardState;
+    private static King wKing;
+    private static King bKing;
 
     public ChessGUI(){
         super("Chess");
@@ -19,6 +22,10 @@ public class ChessGUI extends JFrame{
                 gameboard.add(spot);
             }
         }
+
+        wKing = new King("WK", "WHITE", "xxxx", 7, 4);
+        bKing = new King("BK", "BLACK", "xxxx", 0, 4);
+
     }
 
     public static void setPreviousBoardState(Spot[][] boardState){
@@ -31,6 +38,20 @@ public class ChessGUI extends JFrame{
 
     public static Spot[][] getCurrentBoardState(){
         return board;
+    }
+
+    public static Spot[][] getCopyOfBoardState(){
+        Spot[][] copy = board;
+        return copy;
+    }
+
+    public static King getKing(String color){
+        if(color.equals("WHITE")){
+            return wKing;
+        } else if(color.equals("BLACK")){
+            return bKing;
+        }
+        return null;
     }
 
     public static void main(String[] args){

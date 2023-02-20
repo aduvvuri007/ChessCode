@@ -14,10 +14,11 @@ public abstract class Piece {
     private String pieceColor;
     private String pieceID;
     private String imageID;
+    private int startX, startY;
     private boolean captured;
     protected ArrayList<Spot> possibleMoves = new ArrayList<Spot>();
 
-    public Piece(String pieceID, String pieceColor, String imageID){
+    public Piece(String pieceID, String pieceColor, String imageID, int startX, int startY){
         this.pieceID = pieceID;
         this.pieceColor = pieceColor;
         this.imageID = imageID;
@@ -45,5 +46,13 @@ public abstract class Piece {
 
     public String getImageID(){
         return this.imageID;
+    }
+
+    public int getStartX(){
+        return this.startX;
+    }
+
+    public int getStartY(){
+        return this.startY;
     }
 }
