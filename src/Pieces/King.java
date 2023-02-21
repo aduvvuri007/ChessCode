@@ -29,37 +29,21 @@ public class King extends Piece{
 
         possibleMoves.clear();
 
-        ArrayList<Spot> potentialMoves = new ArrayList<Spot>(Arrays.asList(board[x][y+1], board[x+1][y+1], board[x+1][y], board[x+1][y-1], board[x][y-1], board[x-1][y-1], board[x-1][y], board[x-1][y+1]));
-        if(x == 0){
-            potentialMoves.remove(board[x-1][y-1]);
-            potentialMoves.remove(board[x-1][y]);
-            potentialMoves.remove(board[x-1][y+1]);
-        } else if(x == 7){
-            potentialMoves.remove(board[x+1][y+1]);
-            potentialMoves.remove(board[x+1][y-1]);
-            potentialMoves.remove(board[x+1][y]);
+        int[] posx = {x-1, x-1, x, x+1, x+1, x+1, x, x-1};
+        int[] posy = {y, y+1, y+1, y+1, y, y-1, y-1, y-1};
+        
+        for(int i = 0; i <= 8; i++){
+            if((posx[i] >= 0 && posx[i] < 8) && (posy[i] >= 0 && posy[i] < 8)){
+                if(board[posx[i]][posy[i]].getPiece() == null){
+                    possibleMoves.add(board[posx[i]][posy[i]]);
+                } else if(board[posx[i]][posy[i]].getPiece() != null && !board[posx[i]][posy[i]].getPiece().getPieceColor().equals(this.getPieceColor())){
+                    possibleMoves.add(board[posx[i]][posy[i]]);
+                }
+            } 
         }
 
-        if(y == 0){
-            potentialMoves.remove(board[x+1][y-1]);
-            potentialMoves.remove(board[x-1][y-1]);
-            potentialMoves.remove(board[x][y-1]);
-        } else if(y == 7){
-            potentialMoves.remove(board[x][y+1]);
-            potentialMoves.remove(board[x+1][y+1]);
-            potentialMoves.remove(board[x-1][y+1]);
-        }
-
-        for(Spot spot: potentialMoves){
-            if(spot.getPiece() != null && !spot.getPiece().getPieceColor().equals(this.getPieceColor())){
-                potentialMoves.remove(spot);
-            }
-        }
-
-        possibleMoves = potentialMoves;
-
+        Spot[][] copy = ChessGUI.getCopyOfBoardState();
         for(int i = 0; i < possibleMoves.size(); i++){
-            Spot[][] copy = ChessGUI.getCopyOfBoardState();
             move(copy, copy[getStartX()][getStartY()], possibleMoves.get(i));
             if(isInCheck(copy)){
                 possibleMoves.remove(possibleMoves.get(i));
