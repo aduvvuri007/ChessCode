@@ -14,6 +14,7 @@ import javax.swing.*;
 public class Spot extends JPanel{
     private int x, y;
     private Piece piece;
+    private JLabel pic;
     private boolean isValidSpot, isCheck, isSelected;
 
     public Spot(GridLayout g, int x, int y, Piece piece){
@@ -36,8 +37,11 @@ public class Spot extends JPanel{
         return this.piece;
     }
 
-    public void setPiece(Piece piece){
-        this.piece = piece;
+    public void setPiece(Piece p){
+        this.piece = p;
+        ImageIcon img = new ImageIcon(p.getImageID());
+		pic = new JLabel(img);
+		this.add(pic);
     }
 
     public int getXPos(){
