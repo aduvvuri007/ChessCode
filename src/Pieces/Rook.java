@@ -78,10 +78,5 @@ public class Rook extends Piece{
 
         return possibleMoves;
     } 
-
-    public void move(Spot[][] boardState, Spot startSpot, Spot endSpot){
-        ChessGUI.setPreviousBoardState(boardState);
-        endSpot.setPiece(this);
-        startSpot.removePiece(this);
-    }
+    
 }

@@ -1,6 +1,8 @@
 package Pieces;
 import Game.Spot;
 import java.util.ArrayList;
+import GUI.ChessGUI;
+
 
 /**
  * This is the piece abstract class. It is not an actual object but
@@ -26,7 +28,11 @@ public abstract class Piece {
 
     public abstract ArrayList<Spot> getPossibleMoves(Spot board[][], int x, int y);
     
-    public abstract void move(Spot[][] boardState, Spot startSpot, Spot endSpot);
+    public void move(Spot[][] boardState, Spot startSpot, Spot endSpot){
+        ChessGUI.setPreviousBoardState(boardState);
+        endSpot.setPiece(this);
+        startSpot.removePiece(this);
+    }
 
     public boolean isCaptured(){
         return this.captured;

@@ -1,7 +1,6 @@
 package Pieces;
 import Game.Spot;
 import java.util.ArrayList;
-import java.util.Arrays;
 import GUI.ChessGUI;
 
 
@@ -17,12 +16,6 @@ public class King extends Piece{
 
     public King(String pieceID, String pieceColor, String imageID, int startX, int startY){
         super(pieceID, pieceColor, imageID, startX, startY);
-    }
-
-    public  void move(Spot[][] boardState, Spot startSpot, Spot endSpot){
-        ChessGUI.setPreviousBoardState(boardState);
-        endSpot.setPiece(this);
-        startSpot.removePiece(this);
     }
 
     public ArrayList<Spot> getPossibleMoves(Spot board[][], int x, int y){
