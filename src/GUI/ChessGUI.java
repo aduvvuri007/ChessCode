@@ -52,8 +52,8 @@ public class ChessGUI extends JFrame{
     public ChessGUI(){
         super("Chess");
 
-        wKing = new King("WK", "WHITE", "xxxx", 7, 4);
-        bKing = new King("BK", "BLACK", "xxxx", 0, 4);
+        wKing = new King("WK", "WHITE", "White_King.png", 7, 4);
+        bKing = new King("BK", "BLACK", "Black_King.png", 0, 4);
 
         wPawn1 = new Pawn("WP1", "WHITE", "White_Pawn.png", 6, 0);
         wPawn2 = new Pawn("WP2", "WHITE", "White_Pawn.png", 6, 1);

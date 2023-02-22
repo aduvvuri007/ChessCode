@@ -24,6 +24,8 @@ public abstract class Piece {
         this.pieceID = pieceID;
         this.pieceColor = pieceColor;
         this.imageID = imageID;
+        this.startX = startX;
+        this.startY = startY;
     }
 
     public abstract ArrayList<Spot> getPossibleMoves(Spot board[][], int x, int y);

@@ -3,6 +3,7 @@ import Pieces.*;
 import java.awt.*;
 import javax.swing.*;
 
+
 /**
  * This is the Spot Class
  * It represents one of the 64 spots that are on a chess board.
@@ -14,7 +15,7 @@ import javax.swing.*;
 public class Spot extends JPanel{
     private int x, y;
     private Piece piece;
-    private JLabel pic;
+    private JLabel content;
     private boolean isValidSpot, isCheck, isSelected;
 
     public Spot(GridLayout g, int x, int y, Piece piece){
@@ -39,9 +40,10 @@ public class Spot extends JPanel{
 
     public void setPiece(Piece p){
         this.piece = p;
-        ImageIcon img = new ImageIcon(p.getImageID());
-		pic = new JLabel(img);
-		this.add(pic);
+        ImageIcon img = new ImageIcon("C:\\Users\\vikdu\\ChessCode\\Images\\" + p.getImageID());
+        img.setImage(img.getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
+		content = new JLabel(img);
+		this.add(content);
     }
 
     public int getXPos(){
