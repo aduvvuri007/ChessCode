@@ -18,7 +18,7 @@ public class Spot extends JPanel{
     private Piece piece;
     private JLabel content;
     private boolean isValidSpot, isCheck, isSelected;
-    private String username = System.getProperty("user.name");
+    private String homeDirectory = System.getProperty("user.home");
 
     public Spot(GridLayout g, int x, int y, Piece piece){
         super(g);
@@ -42,7 +42,7 @@ public class Spot extends JPanel{
 
     public void setPiece(Piece p){
         this.piece = p;
-        ImageIcon img = new ImageIcon("C:\\Users\\" + username + "\\ChessCode\\Images\\" + p.getImageID());
+        ImageIcon img = new ImageIcon(homeDirectory + "\\ChessCode\\Images\\" + p.getImageID());
         img.setImage(img.getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
 		content = new JLabel(img);
 		this.add(content);
