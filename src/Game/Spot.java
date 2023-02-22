@@ -1,7 +1,6 @@
 package Game;
 import Pieces.*;
 import java.awt.*;
-import java.net.URL;
 
 import javax.swing.*;
 
