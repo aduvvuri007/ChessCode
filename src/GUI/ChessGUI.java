@@ -1,13 +1,15 @@
 package GUI;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 import Game.Spot;
+import Game.Players;
 import Pieces.*;
 
 
 public class ChessGUI extends JFrame{
 
-    private static JPanel gameboard = new JPanel(new GridLayout(8,8));
     private static Spot[][] board = new Spot[8][8];
     private static Spot[][] previousBoardState;
     private static King wKing;
@@ -51,6 +53,11 @@ public class ChessGUI extends JFrame{
 
     public ChessGUI(){
         super("Chess");
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.setBorder(new EmptyBorder(0, 5, 0, 5));
+        JPanel gameboard = new JPanel(new GridLayout(8,8));
 
         wKing = new King("WK", "WHITE", "White_King.png", 7, 4);
         bKing = new King("BK", "BLACK", "Black_King.png", 0, 4);
@@ -112,6 +119,12 @@ public class ChessGUI extends JFrame{
                 gameboard.add(board[i][j]);
             }
         }
+
+        Players players = new Players();
+
+        panel.add(gameboard, BorderLayout.WEST);
+        panel.add(players);
+        this.add(panel);
     }
 
     public static void setPreviousBoardState(Spot[][] boardState){
@@ -142,8 +155,8 @@ public class ChessGUI extends JFrame{
 
     public static void main(String[] args){
         ChessGUI window = new ChessGUI();
-        window.add(gameboard);
-        window.setBounds(1200, 1200, 1200, 1200);
+        window.setBounds(1500, 1200, 1500, 1200);
+        window.setResizable(false);
         window.setDefaultCloseOperation(EXIT_ON_CLOSE);
         window.setVisible(true); 
     }
