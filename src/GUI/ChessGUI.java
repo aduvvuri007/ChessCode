@@ -122,8 +122,9 @@ public class ChessGUI extends JFrame{
 
         Players players = new Players();
 
-        panel.add(gameboard, BorderLayout.WEST);
-        panel.add(players);
+        panel.add(gameboard);
+        panel.setBorder(new EmptyBorder(0, 0, 0, 200));
+        panel.add(players, BorderLayout.EAST);
         this.add(panel);
     }
 
@@ -155,7 +156,7 @@ public class ChessGUI extends JFrame{
 
     public static void main(String[] args){
         ChessGUI window = new ChessGUI();
-        window.setBounds(1500, 1200, 1500, 1200);
+        window.setBounds(1600, 1200, 1600, 1200);
         window.setResizable(false);
         window.setDefaultCloseOperation(EXIT_ON_CLOSE);
         window.setVisible(true); 
