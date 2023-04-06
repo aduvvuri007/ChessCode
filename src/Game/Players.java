@@ -7,8 +7,8 @@ import javax.swing.border.EmptyBorder;
 public class Players extends JPanel{
 
     private JLabel whitePlayer, blackPlayer;
-    private WhiteTimer whiteTimer;
-    private BlackTimer blackTimer;
+    private static WhiteTimer whiteTimer;
+    private static BlackTimer blackTimer;
 
 
     public Players(){
