@@ -2,13 +2,17 @@ package GUI;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
 import java.awt.*;
 import Game.Spot;
+import Game.BlackTimer;
 import Game.Players;
 import Pieces.*;
 
 
-public class ChessGUI extends JFrame{
+public class ChessGUI extends JFrame implements MouseListener{
 
     private static Spot[][] board = new Spot[8][8];
     private static Spot[][] previousBoardState;
@@ -126,6 +130,13 @@ public class ChessGUI extends JFrame{
         panel.setBorder(new EmptyBorder(0, 0, 0, 200));
         panel.add(players, BorderLayout.EAST);
         this.add(panel);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        for(int i = 0; i < board.length; i++){
+            for (int j = 0; j < board[0].length; j++){
+                board[i][j].addMouseListener(this);
+             }
+        }
     }
 
     public static void setPreviousBoardState(Spot[][] boardState){
@@ -154,11 +165,43 @@ public class ChessGUI extends JFrame{
         return null;
     }
 
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        Spot s = (Spot)e.getSource();
+        if (s.getPiece() != null){
+            s.select();
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mousePressed'");
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mouseReleased'");
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mouseEntered'");
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'mouseExited'");
+    }
+
     public static void main(String[] args){
         ChessGUI window = new ChessGUI();
         window.setBounds(1600, 1200, 1600, 1200);
         window.setResizable(false);
-        window.setDefaultCloseOperation(EXIT_ON_CLOSE);
         window.setVisible(true); 
+        BlackTimer.getBlackTimer().stop();
     }
 }

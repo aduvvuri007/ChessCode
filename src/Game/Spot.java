@@ -89,7 +89,7 @@ public class Spot extends JPanel{
     }
 
     public void select(){
-        this.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+        this.setBorder(BorderFactory.createLineBorder(Color.BLUE, 10));
         isSelected = true;
     }
 
