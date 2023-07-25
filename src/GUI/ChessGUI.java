@@ -2,6 +2,7 @@ package GUI;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -12,7 +13,7 @@ import Game.Players;
 import Pieces.*;
 
 
-public class ChessGUI extends JFrame implements MouseListener{
+public class ChessGUI extends JFrame {
 
     private static Spot[][] board = new Spot[8][8];
     private static Spot[][] previousBoardState;
@@ -55,9 +56,14 @@ public class ChessGUI extends JFrame implements MouseListener{
     private Queen wQueen;
     private Queen bQueen;
 
+    private static String gameState;
+    private static String gamePlay = "game play";
+    private static String gameOver = "game over";
+
     public ChessGUI(){
         super("Chess");
 
+        gameState = gamePlay;
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         panel.setBorder(new EmptyBorder(0, 5, 0, 5));
@@ -107,6 +113,23 @@ public class ChessGUI extends JFrame implements MouseListener{
                           bPawn1, bPawn2, bPawn3, bPawn4, bPawn5, bPawn6, bPawn7, bPawn8,
                           wRook1, wRook2, bRook1, bRook2, wKnight1, wKnight2, bKnight1, bKnight2,
                           wBishop1, wBishop2, bBishop1, bBishop2, wQueen, bQueen, wKing, bKing};
+                          
+        MouseAdapter mouseHandler = new MouseAdapter() {
+            private Spot lastClicked;
+            public void mouseClicked(MouseEvent e) {
+                if (lastClicked != null) {
+                    if ((lastClicked.getX() + lastClicked.getY()) % 2 == 0) {
+                        setBackground(new Color(219, 204, 182));
+                    } else {
+                        setBackground(new Color(99, 71, 30));;
+                    };
+                } if (e.getSource() instanceof Spot) {
+                    Spot spot = (Spot) e.getSource();
+                    spot.select();
+                    lastClicked = spot;
+                }
+            }
+        };
 
         for(int i = 0; i < board.length; i++){
             for (int j = 0; j < board[0].length; j++){
@@ -121,9 +144,11 @@ public class ChessGUI extends JFrame implements MouseListener{
         for (int i = 0; i < board.length; i++){
             for (int j = 0; j < board[0].length; j++){
                 gameboard.add(board[i][j]);
+                board[i][j].addMouseListener(mouseHandler);
             }
         }
 
+        
         Players players = new Players();
 
         panel.add(gameboard);
@@ -131,12 +156,6 @@ public class ChessGUI extends JFrame implements MouseListener{
         panel.add(players, BorderLayout.EAST);
         this.add(panel);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-        for(int i = 0; i < board.length; i++){
-            for (int j = 0; j < board[0].length; j++){
-                board[i][j].addMouseListener(this);
-             }
-        }
     }
 
     public static void setPreviousBoardState(Spot[][] boardState){
@@ -165,43 +184,12 @@ public class ChessGUI extends JFrame implements MouseListener{
         return null;
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        Spot s = (Spot)e.getSource();
-        if (s.getPiece() != null){
-            s.select();
-        }
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mousePressed'");
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseReleased'");
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseEntered'");
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseExited'");
-    }
-
     public static void main(String[] args){
         ChessGUI window = new ChessGUI();
         window.setBounds(1600, 1200, 1600, 1200);
         window.setResizable(false);
         window.setVisible(true); 
         BlackTimer.getBlackTimer().stop();
+        board[1][1].select();
     }
 }
