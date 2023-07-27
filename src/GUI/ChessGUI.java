@@ -4,8 +4,7 @@ import javax.swing.border.EmptyBorder;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-
+import java.util.ArrayList;
 import java.awt.*;
 import Game.Spot;
 import Game.BlackTimer;
@@ -60,6 +59,8 @@ public class ChessGUI extends JFrame {
     private static String gamePlay = "game play";
     private static String gameOver = "game over";
 
+    private static String currentMove = "WHITE";
+
     public ChessGUI(){
         super("Chess");
 
@@ -113,23 +114,6 @@ public class ChessGUI extends JFrame {
                           bPawn1, bPawn2, bPawn3, bPawn4, bPawn5, bPawn6, bPawn7, bPawn8,
                           wRook1, wRook2, bRook1, bRook2, wKnight1, wKnight2, bKnight1, bKnight2,
                           wBishop1, wBishop2, bBishop1, bBishop2, wQueen, bQueen, wKing, bKing};
-                          
-        MouseAdapter mouseHandler = new MouseAdapter() {
-            private Spot lastClicked;
-            public void mouseClicked(MouseEvent e) {
-                if (lastClicked != null) {
-                    if ((lastClicked.getX() + lastClicked.getY()) % 2 == 0) {
-                        setBackground(new Color(219, 204, 182));
-                    } else {
-                        setBackground(new Color(99, 71, 30));;
-                    };
-                } if (e.getSource() instanceof Spot) {
-                    Spot spot = (Spot) e.getSource();
-                    spot.select();
-                    lastClicked = spot;
-                }
-            }
-        };
 
         for(int i = 0; i < board.length; i++){
             for (int j = 0; j < board[0].length; j++){
@@ -140,6 +124,38 @@ public class ChessGUI extends JFrame {
         for(int i = 0; i < pieces.length; i++){
             board[pieces[i].getStartX()][pieces[i].getStartY()].setPiece(pieces[i]);
         }
+
+        MouseAdapter mouseHandler = new MouseAdapter() {
+            private Spot lastClicked;
+            private ArrayList<Spot> moves;
+            public void mouseClicked(MouseEvent e) {
+                if (lastClicked != null && lastClicked.isSelected()) {
+                    lastClicked.deselect();
+                    for (Spot n : moves){
+                        if ((n.getXPos() + n.getYPos()) % 2 == 0) {
+                            n.setBackground(new Color(219, 204, 182));
+                        } else {
+                            n.setBackground(new Color(99, 71, 30));;
+                        }
+                    }
+                } 
+                if (e.getSource() instanceof Spot) {
+                    Spot spot = (Spot) e.getSource();
+                    if (spot.isSelected()){
+                        spot.deselect();
+                    } else if (!spot.isSelected()) {
+                        spot.select();
+                    }
+
+                    if (spot.getPiece() != null){
+                        moves = spot.getPiece().getPossibleMoves(board, spot.getXPos(), spot.getYPos());
+                        moves.forEach(n -> n.setBackground(Color.YELLOW));
+                    }
+
+                    lastClicked = spot;
+                }
+            }
+        };
 
         for (int i = 0; i < board.length; i++){
             for (int j = 0; j < board[0].length; j++){
@@ -175,6 +191,10 @@ public class ChessGUI extends JFrame {
         return copy;
     }
 
+    public static String getCurrentMove(){
+        return currentMove;
+    }
+
     public static King getKing(String color){
         if(color.equals("WHITE")){
             return wKing;
@@ -190,6 +210,5 @@ public class ChessGUI extends JFrame {
         window.setResizable(false);
         window.setVisible(true); 
         BlackTimer.getBlackTimer().stop();
-        board[1][1].select();
     }
 }

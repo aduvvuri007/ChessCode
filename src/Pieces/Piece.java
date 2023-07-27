@@ -33,7 +33,7 @@ public abstract class Piece {
     public void move(Spot[][] boardState, Spot startSpot, Spot endSpot){
         ChessGUI.setPreviousBoardState(boardState);
         endSpot.setPiece(this);
-        startSpot.removePiece(this);
+        startSpot.removePiece();
     }
 
     public boolean isCaptured(){

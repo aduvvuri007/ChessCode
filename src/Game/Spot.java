@@ -56,8 +56,9 @@ public class Spot extends JPanel{
         return this.y;
     }
 
-    public void removePiece(Piece piece){
+    public void removePiece(){
         this.piece = null;
+        this.remove(content);
     }
     
     public boolean isValidSpot(){
@@ -65,13 +66,11 @@ public class Spot extends JPanel{
     }
 
     public void setValidSpot(){
-        this.setBorder(BorderFactory.createLineBorder(Color.WHITE));
-        isValidSpot = true;
+        this.isValidSpot = true;
     }
 
     public void removeValidSpot(){
-        this.setBorder(BorderFactory.createLineBorder(Color.RED));
-        isValidSpot = false;
+        this.isValidSpot = false;
     }
 
     public boolean isInCheck(){
