@@ -16,7 +16,6 @@ import Pieces.*;
 public class ChessGUI extends JFrame {
 
     private static Spot[][] board = new Spot[8][8];
-    private static Spot[][] previousBoardState;
     private static King wKing;
     private static King bKing;
 
@@ -129,7 +128,7 @@ public class ChessGUI extends JFrame {
                     lastClicked.deselect();
                     Spot s = (Spot) e.getSource();
                     if (s.isValidSpot()){
-                        lastClicked.getPiece().move(board, board[lastClicked.getXPos()][lastClicked.getYPos()], s);
+                        lastClicked.getPiece().move(board[lastClicked.getXPos()][lastClicked.getYPos()], s);
                         changeMove();
                         if (currentMove.equals("WHITE")){
                             BlackTimer.getBlackTimer().stop();
@@ -184,20 +183,19 @@ public class ChessGUI extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
-    public static void setPreviousBoardState(Spot[][] boardState){
-        previousBoardState = boardState;
-    }
-
-    public static Spot[][] getPreviousBoardState(){
-        return previousBoardState;
-    }
-
     public static Spot[][] getCurrentBoardState(){
         return board;
     }
 
     public static Spot[][] getCopyOfBoardState(){
-        Spot[][] copy = board;
+        Spot[][] copy = new Spot[8][8];
+        for(int i = 0; i < board.length; i++){
+            for (int j = 0; j < board[0].length; j++){
+                try{
+                    copy[i][j] = new Spot(board[i][j]);
+                } catch (CloneNotSupportedException e){e.printStackTrace(); System.out.println("There is a problem with cloning !!");}
+            }
+        }
         return copy;
     }
 
@@ -213,13 +211,19 @@ public class ChessGUI extends JFrame {
         return currentMove;
     }
 
-    public static King getKing(String color){
-        if(color.equals("WHITE")){
+    public static King getKing(String color, Spot[][] b){
+        for(int i = 0; i < b.length; i++){
+            for (int j = 0; j < b[0].length; j++){
+                if (b[i][j].getPiece() != null && b[i][j].getPiece() instanceof King && b[i][j].getPiece().getPieceColor().equals(color)){
+                    return (King) b[i][j].getPiece();
+                }
+            }
+        }
+        if (color.equals("WHITE")){
             return wKing;
-        } else if(color.equals("BLACK")){
+        } else {
             return bKing;
         }
-        return null;
     }
 
     public static void main(String[] args){

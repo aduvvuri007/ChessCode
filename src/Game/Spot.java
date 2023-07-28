@@ -13,15 +13,25 @@ import javax.swing.*;
  * 
  */
 
-public class Spot extends JPanel{
+public class Spot extends JPanel implements Cloneable{
     private int x, y;
+    private GridLayout g;
     private Piece piece;
     private JLabel content;
     private boolean isValidSpot, isCheck, isSelected;
     private String homeDirectory = System.getProperty("user.home");
 
+    public Object clone(){  
+        try{  
+            return super.clone();  
+        }catch(Exception e){ 
+            return null; 
+        }
+    }
+
     public Spot(GridLayout g, int x, int y, Piece piece){
         super(g);
+        this.g = g;
         this.x = x;
         this.y = y;
 
@@ -35,6 +45,25 @@ public class Spot extends JPanel{
             setPiece(piece);
         }
     }
+
+    public Spot(Spot s) throws CloneNotSupportedException{
+        this.g = s.getGridLayout();
+        this.x = s.x;
+        this.y = s.y;
+
+        if ((x + y) % 2 == 0) {
+            setBackground(new Color(219, 204, 182));
+        } else {
+            setBackground(new Color(99, 71, 30));;
+        }
+
+        if (piece != null){
+            setPiece(piece);
+        } else {
+            this.piece = null;
+        }
+
+    }
     
     public Piece getPiece(){
         return this.piece;
@@ -46,6 +75,10 @@ public class Spot extends JPanel{
         img.setImage(img.getImage().getScaledInstance(120, 120, Image.SCALE_DEFAULT));
 		content = new JLabel(img);
 		this.add(content);
+    }
+
+    public GridLayout getGridLayout(){
+        return g;
     }
 
     public int getXPos(){
@@ -78,12 +111,12 @@ public class Spot extends JPanel{
     }
 
     public void setCheck(){
-        this.setBorder(BorderFactory.createLineBorder(Color.RED));
+        this.setBackground(Color.RED);
         isCheck = true;
     }
 
     public void removeCheck(){
-        this.setBorder(null);
+        this.deselect();
         isCheck = false;
     }
 

@@ -26,7 +26,7 @@ public class Pawn extends Piece {
         if(ChessGUI.getCurrentMove().equals(color)){
             if(getPieceColor().equals("BLACK")){
                 //Moving straight up for first move only (will have to add if king will be in check or not)
-                if (moveCounter == 0 && board[x+1][y].getPiece() == null && board[x+2][y].getPiece() == null){
+                if (x == 1 && board[2][y].getPiece() == null && board[3][y].getPiece() == null){
                     possibleMoves.add(board[x+2][y]);
                 }
     
@@ -48,7 +48,7 @@ public class Pawn extends Piece {
                     if (board[x+1][y+1].getPiece() != null && !board[x+1][y+1].getPiece().getPieceColor().equals(this.getPieceColor())){
                         possibleMoves.add(board[x+1][y+1]);
                     }
-                    if (board[x-1][y+1].getPiece() != null && !board[x-1][y+1].getPiece().getPieceColor().equals(this.getPieceColor())){
+                    if (board[x+1][y-1].getPiece() != null && !board[x+1][y-1].getPiece().getPieceColor().equals(this.getPieceColor())){
                         possibleMoves.add(board[x+1][y-1]);
                     }
                 }
@@ -95,19 +95,13 @@ public class Pawn extends Piece {
         return possibleMoves;
     }
 
-    public void move(Spot[][] boardState, Spot startSpot, Spot endSpot){
-        endSpot.setPiece(this);
-        startSpot.removePiece();
-        moveCounter += 1;
-    } 
-
     //Mainly used for en passant
-    public boolean canBeCapturedWithEnPassant(Spot[][] boardState, int currentX, int currentY){
+    /*public boolean canBeCapturedWithEnPassant(Spot[][] boardState, int currentX, int currentY){
         if (((Pawn) boardState[currentX][currentY].getPiece()).getMoveCounter() == 1 && Math.abs(currentY - boardState[currentX][currentY].getPiece().getStartY()) == 2 && currentX == boardState[currentX][currentY].getPiece().getStartX() && !ChessGUI.getPreviousBoardState()[currentX][currentY].equals(boardState[currentX][currentY])){
             return true;
         }
         return false;
-    }
+    } */
 
     public int getMoveCounter(){
         return moveCounter;

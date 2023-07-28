@@ -19,31 +19,22 @@ public class Knight extends Piece{
 
         possibleMoves.clear();
 
-        int[] posx = {x-1, x-2, x-2, x-1, x+1, x+2, x+2, x+1};
-        int[] posy = {y+2, y+1, y-1, y-2, y-2, y-1, y+1, y+2};
+        if (ChessGUI.getCurrentMove().equals(this.getPieceColor())){
+            int[] posx = {x-1, x-2, x-2, x-1, x+1, x+2, x+2, x+1};
+            int[] posy = {y+2, y+1, y-1, y-2, y-2, y-1, y+1, y+2};
 
-        for(int i = 0; i <= 8; i++){
-            if((posx[i] >= 0 && posx[i] < 8) && (posy[i] >= 0 && posy[i] < 8)){
-                if(board[posx[i]][posy[i]].getPiece() == null){
-                    possibleMoves.add(board[posx[i]][posy[i]]);
-                } else if(board[posx[i]][posy[i]].getPiece() != null && !board[posx[i]][posy[i]].getPiece().getPieceColor().equals(this.getPieceColor())){
-                    possibleMoves.add(board[posx[i]][posy[i]]);
+            for(int i = 0; i < 8; i++){
+                if((posx[i] >= 0 && posx[i] < 8) && (posy[i] >= 0 && posy[i] < 8)){
+                    if(board[posx[i]][posy[i]].getPiece() == null){
+                        possibleMoves.add(board[posx[i]][posy[i]]);
+                    } else if(board[posx[i]][posy[i]].getPiece() != null && !board[posx[i]][posy[i]].getPiece().getPieceColor().equals(this.getPieceColor())){
+                        possibleMoves.add(board[posx[i]][posy[i]]);
+                    }
                 }
             }
         }
 
         //Accounts for checks
-        Spot[][] copy = ChessGUI.getCopyOfBoardState();
-        for(int i = 0; i < possibleMoves.size(); i++){
-            move(copy, copy[getStartX()][getStartY()], possibleMoves.get(i));
-            if(this.getPieceColor().equals("WHITE")){
-                if(ChessGUI.getKing("WHITE").isInCheck(copy)){
-                    possibleMoves.remove(possibleMoves.get(i));
-                } else if(ChessGUI.getKing("BLACK").isInCheck(copy)){
-                    possibleMoves.remove(possibleMoves.get(i));
-                }
-            }
-        }
 
         return possibleMoves;
     }

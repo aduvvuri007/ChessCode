@@ -1,7 +1,6 @@
 package Pieces;
 import Game.Spot;
 import java.util.ArrayList;
-import GUI.ChessGUI;
 
 
 /**
@@ -12,11 +11,12 @@ import GUI.ChessGUI;
  * 
  */
 
-public abstract class Piece {
+public abstract class Piece implements Cloneable{
     private String pieceColor;
     private String pieceID;
     private String imageID;
     private int startX, startY;
+    private int currentX, currentY;
     private boolean captured;
     protected ArrayList<Spot> possibleMoves = new ArrayList<Spot>();
 
@@ -26,12 +26,18 @@ public abstract class Piece {
         this.imageID = imageID;
         this.startX = startX;
         this.startY = startY;
+        this.currentX = startX;
+        this.currentY = startY;
     }
 
     public abstract ArrayList<Spot> getPossibleMoves(Spot board[][], int x, int y);
     
-    public void move(Spot[][] boardState, Spot startSpot, Spot endSpot){
-        ChessGUI.setPreviousBoardState(boardState);
+    public void move(Spot startSpot, Spot endSpot){
+        setCurrentX(endSpot.getXPos());
+        setCurrentY(endSpot.getYPos());
+        if (endSpot.getPiece() != null){
+            endSpot.removePiece();
+        }
         endSpot.setPiece(this);
         startSpot.removePiece();
     }
@@ -62,5 +68,25 @@ public abstract class Piece {
 
     public int getStartY(){
         return this.startY;
+    }
+
+    public void setCurrentX(int x){
+        this.currentX = x;
+    }
+
+    public void setCurrentY(int y){
+        this.currentY = y;
+    }
+
+    public int getCurrentX(){
+        return this.currentX;
+    }
+
+    public int getCurrentY(){
+        return this.currentY;
+    }
+
+    public Piece getCopy() throws CloneNotSupportedException{
+        return (Piece) this.clone();
     }
 }
