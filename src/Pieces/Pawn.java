@@ -53,28 +53,8 @@ public class Pawn extends Piece {
                     }
                 }
     
-                //Capturing with en passant (will need to account for king being in check)
-                if (y == 0){
-                    if (board[x][y+1].getPiece() instanceof Pawn && !board[x][y+1].getPiece().getPieceColor().equals(this.getPieceColor())){
-                        if (((Pawn)board[x][y+1].getPiece()).canBeCapturedWithEnPassant(board, x, y+1)){
-                            possibleMoves.add(board[x+1][y+1]);
-                        }
-                    }
-                } else if (y == 7){
-                    if (board[x][y-1].getPiece() instanceof Pawn && !board[x][y-1].getPiece().getPieceColor().equals(this.getPieceColor())){
-                        if (((Pawn)board[x][y-1].getPiece()).canBeCapturedWithEnPassant(board,x, y-1)){
-                            possibleMoves.add(board[x+1][y-1]);
-                        }
-                    }
-                } else {
-                    if (board[x][y+1].getPiece() instanceof Pawn || board[x][y-1].getPiece() instanceof Pawn){
-                        if (((Pawn)board[x][y+1].getPiece()).canBeCapturedWithEnPassant(board, x+1, y) && !board[x][y+1].getPiece().getPieceColor().equals(this.getPieceColor())){
-                            possibleMoves.add(board[x+1][y+1]);
-                        } else if (((Pawn)board[x][y-1].getPiece()).canBeCapturedWithEnPassant(board, x, y-1) && !board[x][y-1].getPiece().getPieceColor().equals(this.getPieceColor())) {
-                            possibleMoves.add(board[x+1][y-1]);
-                        }
-                    }
-                }
+                //NEed to rewrite en passant (will need to account for king being in check)
+    
             } else if(getPieceColor().equals("WHITE")){
                 //Moving straight up for first move only (will have to add if king will be in check or not)
                 if (x == 6 && board[5][y].getPiece() == null && board[4][y].getPiece() == null){
@@ -104,54 +84,13 @@ public class Pawn extends Piece {
                     }
                 }
     
-                //Capturing with en passant (will need to account for king being in check)
-                if (y == 0){
-                    if (board[x][y+1].getPiece() instanceof Pawn && !board[x][y+1].getPiece().getPieceColor().equals(this.getPieceColor())){
-                        if (((Pawn)board[x][y+1].getPiece()).canBeCapturedWithEnPassant(board, x, y+1)){
-                            possibleMoves.add(board[x-1][y+1]);
-                        }
-                    }
-                } else if (y == 7){
-                    if (board[x][y-1].getPiece() instanceof Pawn && !board[x][y-1].getPiece().getPieceColor().equals(this.getPieceColor())){
-                        if (((Pawn)board[x][y-1].getPiece()).canBeCapturedWithEnPassant(board,x, y-1)){
-                            possibleMoves.add(board[x-1][y-1]);
-                        }
-                    }
-                } else {
-                    if (board[x][y+1].getPiece() instanceof Pawn || board[x][y-1].getPiece() instanceof Pawn){
-                        if (((Pawn)board[x][y+1].getPiece()).canBeCapturedWithEnPassant(board, x, y+1) && !board[x][y+1].getPiece().getPieceColor().equals(this.getPieceColor())){
-                            possibleMoves.add(board[x-1][y+1]);
-                        } else if (((Pawn)board[x][y-1].getPiece()).canBeCapturedWithEnPassant(board, x, y-1) && !board[x][y-1].getPiece().getPieceColor().equals(this.getPieceColor())) {
-                            possibleMoves.add(board[x-1][y-1]);
-                        }
-                    }
-                }
+                //Need to rewrite En Passant Code 
             }
         } else {
             return possibleMoves;
         }
 
-    
-
-        //Accounts for checks
-        Spot[][] copy = ChessGUI.getCopyOfBoardState();
-        for(int i = 0; i < possibleMoves.size(); i++){
-            move(copy, copy[x][y], possibleMoves.get(i));
-            if(this.getPieceColor().equals("WHITE")){
-                if(ChessGUI.getKing("WHITE").isInCheck(copy)){
-                    possibleMoves.get(i).removePiece();
-                    possibleMoves.remove(possibleMoves.get(i));
-                }
-            } else if (this.getPieceColor().equals("BLACK")) {
-                if(ChessGUI.getKing("BLACK").isInCheck(copy)){
-                    possibleMoves.get(i).removePiece();
-                    possibleMoves.remove(possibleMoves.get(i));
-                }
-            }
-            possibleMoves.get(i).removePiece();
-        }
-
-        copy[x][y].setPiece(this);
+        //Will need to account for checks
 
         return possibleMoves;
     }

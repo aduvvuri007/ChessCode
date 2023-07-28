@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.awt.*;
 import Game.Spot;
 import Game.BlackTimer;
+import Game.WhiteTimer;
 import Game.Players;
 import Pieces.*;
 
@@ -55,16 +56,11 @@ public class ChessGUI extends JFrame {
     private Queen wQueen;
     private Queen bQueen;
 
-    private static String gameState;
-    private static String gamePlay = "game play";
-    private static String gameOver = "game over";
-
     private static String currentMove = "WHITE";
 
     public ChessGUI(){
         super("Chess");
-
-        gameState = gamePlay;
+        
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         panel.setBorder(new EmptyBorder(0, 5, 0, 5));
@@ -131,12 +127,25 @@ public class ChessGUI extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 if (lastClicked != null && lastClicked.isSelected()) {
                     lastClicked.deselect();
+                    Spot s = (Spot) e.getSource();
+                    if (s.isValidSpot()){
+                        lastClicked.getPiece().move(board, board[lastClicked.getXPos()][lastClicked.getYPos()], s);
+                        changeMove();
+                        if (currentMove.equals("WHITE")){
+                            BlackTimer.getBlackTimer().stop();
+                            WhiteTimer.getWhiteTimer().start();
+                        } else if (currentMove.equals("BLACK")){
+                            WhiteTimer.getWhiteTimer().stop();
+                            BlackTimer.getBlackTimer().start();
+                        }
+                    }
                     for (Spot n : moves){
                         if ((n.getXPos() + n.getYPos()) % 2 == 0) {
                             n.setBackground(new Color(219, 204, 182));
                         } else {
                             n.setBackground(new Color(99, 71, 30));;
                         }
+                        n.removeValidSpot();
                     }
                 } 
                 if (e.getSource() instanceof Spot) {
@@ -150,6 +159,7 @@ public class ChessGUI extends JFrame {
                     if (spot.getPiece() != null){
                         moves = spot.getPiece().getPossibleMoves(board, spot.getXPos(), spot.getYPos());
                         moves.forEach(n -> n.setBackground(Color.YELLOW));
+                        moves.forEach(n -> n.setValidSpot());
                     }
 
                     lastClicked = spot;
@@ -189,6 +199,14 @@ public class ChessGUI extends JFrame {
     public static Spot[][] getCopyOfBoardState(){
         Spot[][] copy = board;
         return copy;
+    }
+
+    public static void changeMove(){
+        if (currentMove.equals("WHITE")){
+            currentMove = "BLACK";
+        } else if (currentMove.equals("BLACK")) {
+            currentMove = "WHITE";
+        }
     }
 
     public static String getCurrentMove(){
