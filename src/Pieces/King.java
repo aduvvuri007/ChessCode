@@ -43,6 +43,14 @@ public class King extends Piece{
                     possibleMoves.add(board[x][y+2]);
                 }
             }
+
+            //Long Castle
+            if(this.getMoveCounter() == 0 && board[x][y - 1].getPiece() == null && board[x][y - 2].getPiece() == null && board[x][y - 3].getPiece() == null){
+                if (board[x][y -4].getPiece() instanceof Rook && board[x][y - 4].getPiece().getMoveCounter() == 0){
+                    board[x][y-2].setLongCastleMove();
+                    possibleMoves.add(board[x][y-2]);
+                }
+            }
         }
 
         return possibleMoves;

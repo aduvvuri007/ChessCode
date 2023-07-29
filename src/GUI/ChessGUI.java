@@ -134,6 +134,12 @@ public class ChessGUI extends JFrame {
                             board[lastClicked.getXPos()][lastClicked.getYPos() + 3].deselect();
                             lastClicked.getPiece().move(board[lastClicked.getXPos()][lastClicked.getYPos()], s);
                             s.removeShortCastleMove();
+                        } else if (s.isLongCastleMove()){
+                            board[lastClicked.getXPos()][lastClicked.getYPos() - 4].getPiece().move(board[lastClicked.getXPos()][lastClicked.getYPos() - 4], board[lastClicked.getXPos()][lastClicked.getYPos() - 1]);
+                            board[lastClicked.getXPos()][lastClicked.getYPos() - 4].select();
+                            board[lastClicked.getXPos()][lastClicked.getYPos() - 4].deselect();
+                            lastClicked.getPiece().move(board[lastClicked.getXPos()][lastClicked.getYPos()], s);
+                            s.removeLongCastleMove();
                         } else{
                             lastClicked.getPiece().move(board[lastClicked.getXPos()][lastClicked.getYPos()], s);
                         }
