@@ -17,6 +17,7 @@ public abstract class Piece implements Cloneable{
     private String imageID;
     private int startX, startY;
     private int currentX, currentY;
+    private int moveCounter = 0;
     private boolean captured;
     protected ArrayList<Spot> possibleMoves = new ArrayList<Spot>();
 
@@ -33,13 +34,14 @@ public abstract class Piece implements Cloneable{
     public abstract ArrayList<Spot> getPossibleMoves(Spot board[][], int x, int y);
     
     public void move(Spot startSpot, Spot endSpot){
+        moveCounter++;
         setCurrentX(endSpot.getXPos());
         setCurrentY(endSpot.getYPos());
         if (endSpot.getPiece() != null){
             endSpot.removePiece();
         }
-        endSpot.setPiece(this);
         startSpot.removePiece();
+        endSpot.setPiece(this);
     }
 
     public boolean isCaptured(){
@@ -66,6 +68,10 @@ public abstract class Piece implements Cloneable{
         return this.startX;
     }
 
+    public int getMoveCounter(){
+        return this.moveCounter;
+    }
+
     public int getStartY(){
         return this.startY;
     }
@@ -88,5 +94,9 @@ public abstract class Piece implements Cloneable{
 
     public Piece getCopy() throws CloneNotSupportedException{
         return (Piece) this.clone();
+    }
+
+    public void incrementMoveCounter(){
+        moveCounter++;
     }
 }

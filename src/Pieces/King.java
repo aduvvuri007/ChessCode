@@ -35,6 +35,14 @@ public class King extends Piece{
                     }
                 } 
             }
+
+            //Short Castle
+            if(this.getMoveCounter() == 0 && board[x][y + 1].getPiece() == null && board[x][y + 2].getPiece() == null){
+                if (board[x][y + 3].getPiece() instanceof Rook && board[x][y + 3].getPiece().getMoveCounter() == 0){
+                    board[x][y+2].setShortCastleMove();
+                    possibleMoves.add(board[x][y+2]);
+                }
+            }
         }
 
         return possibleMoves;

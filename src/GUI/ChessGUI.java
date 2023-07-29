@@ -128,7 +128,15 @@ public class ChessGUI extends JFrame {
                     lastClicked.deselect();
                     Spot s = (Spot) e.getSource();
                     if (s.isValidSpot()){
-                        lastClicked.getPiece().move(board[lastClicked.getXPos()][lastClicked.getYPos()], s);
+                        if (s.isShortCastleMove()){
+                            board[lastClicked.getXPos()][lastClicked.getYPos() + 3].getPiece().move(board[lastClicked.getXPos()][lastClicked.getYPos() + 3], board[lastClicked.getXPos()][lastClicked.getYPos() + 1]);
+                            board[lastClicked.getXPos()][lastClicked.getYPos() + 3].select();
+                            board[lastClicked.getXPos()][lastClicked.getYPos() + 3].deselect();
+                            lastClicked.getPiece().move(board[lastClicked.getXPos()][lastClicked.getYPos()], s);
+                            s.removeShortCastleMove();
+                        } else{
+                            lastClicked.getPiece().move(board[lastClicked.getXPos()][lastClicked.getYPos()], s);
+                        }
                         changeMove();
                         if (currentMove.equals("WHITE")){
                             BlackTimer.getBlackTimer().stop();

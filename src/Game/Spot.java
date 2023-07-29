@@ -18,6 +18,7 @@ public class Spot extends JPanel implements Cloneable{
     private GridLayout g;
     private Piece piece;
     private JLabel content;
+    private boolean shortCastleMove = false;
     private boolean isValidSpot, isCheck, isSelected;
     private String homeDirectory = System.getProperty("user.home");
 
@@ -136,5 +137,17 @@ public class Spot extends JPanel implements Cloneable{
 
     public boolean isSelected(){
         return isSelected;
+    }
+
+    public void setShortCastleMove(){
+        shortCastleMove = true;
+    }
+
+    public void removeShortCastleMove(){
+        shortCastleMove = false;
+    }
+
+    public boolean isShortCastleMove(){
+        return shortCastleMove;
     }
 }
