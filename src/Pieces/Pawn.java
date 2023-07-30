@@ -90,8 +90,6 @@ public class Pawn extends Piece {
             return possibleMoves;
         }
 
-        //Will need to account for checks
-
         return possibleMoves;
     }
 

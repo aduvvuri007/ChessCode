@@ -113,12 +113,12 @@ public class Spot extends JPanel implements Cloneable{
     }
 
     public void setCheck(){
-        this.setBackground(Color.RED);
+        this.setBorder(BorderFactory. createLineBorder(Color.RED, 5));
         isCheck = true;
     }
 
     public void removeCheck(){
-        this.deselect();
+        this.setBorder(null);
         isCheck = false;
     }
 

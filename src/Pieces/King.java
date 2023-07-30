@@ -1,6 +1,7 @@
 package Pieces;
 import Game.Spot;
 import java.util.ArrayList;
+
 import GUI.ChessGUI;
 
 
@@ -53,19 +54,51 @@ public class King extends Piece{
             }
         }
 
-        return possibleMoves;
-    }
-
-    public Spot getSpot(Spot[][] board){
-        Spot s = null;
-        for (int i = 0; i < board.length; i++){
-            for (int j = 0; j < board[0].length; j++){
-                if(board[i][j].getPiece() != null && board[i][j].getPiece().equals(this)){
-                    s = board[i][j];
+        if (isInCheck(board) && possibleMoves.size() > 0) {
+            ArrayList<Spot> validMoves = new ArrayList<>();
+        
+            for (Spot move : possibleMoves) {
+                int startX = getCurrentX();
+                int startY = getCurrentY();
+                int targetX = move.getXPos();
+                int targetY = move.getYPos();
+                Piece targetPiece = board[targetX][targetY].getPiece();
+        
+                // Simulate the move
+                if (targetPiece != null){
+                    setCurrentX(targetX);
+                    setCurrentY(targetY);
+                    board[targetX][targetY].removePiece();
+                    board[targetX][targetY].setPiece(this);
+                    board[startX][startY].removePiece();
+                } else {
+                    setCurrentX(targetX);
+                    setCurrentY(targetY);
+                    board[targetX][targetY].setPiece(this);
+                    board[startX][startY].removePiece();
+                }
+        
+                if (!this.isInCheck(board)) {
+                    validMoves.add(move);
+                }
+        
+                if (targetPiece != null){
+                    setCurrentX(startX);
+                    setCurrentY(startY);
+                    board[startX][startY].setPiece(this);
+                    board[targetX][targetY].removePiece();
+                    board[targetX][targetY].setPiece(targetPiece);
+                } else {
+                    setCurrentX(startX);
+                    setCurrentY(startY);
+                    board[startX][startY].setPiece(this);
+                    board[targetX][targetY].removePiece();
                 }
             }
+            return validMoves;
         }
-        return s;
+        
+        return possibleMoves;
     }
 
     public boolean isInCheck(Spot[][] board){

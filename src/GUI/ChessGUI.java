@@ -142,8 +142,18 @@ public class ChessGUI extends JFrame {
                             s.removeLongCastleMove();
                         } else{
                             lastClicked.getPiece().move(board[lastClicked.getXPos()][lastClicked.getYPos()], s);
+                            for(int i = 0; i < board.length; i++){
+                                for (int j = 0; j < board[0].length; j++){
+                                    if (board[i][j].isInCheck()){
+                                        board[i][j].removeCheck();
+                                    }
+                                }
+                            }
                         }
                         changeMove();
+                        if (getKing(currentMove, board).isInCheck(board)){
+                            board[getKing(currentMove, board).getCurrentX()][getKing(currentMove, board).getCurrentY()].setCheck();
+                        }
                         if (currentMove.equals("WHITE")){
                             BlackTimer.getBlackTimer().stop();
                             WhiteTimer.getWhiteTimer().start();
@@ -154,9 +164,9 @@ public class ChessGUI extends JFrame {
                     }
                     for (Spot n : moves){
                         if ((n.getXPos() + n.getYPos()) % 2 == 0) {
-                            n.setBackground(new Color(219, 204, 182));
+                            n.setBorder(null);
                         } else {
-                            n.setBackground(new Color(99, 71, 30));;
+                            n.setBorder(null);
                         }
                         n.removeValidSpot();
                     }
@@ -166,12 +176,17 @@ public class ChessGUI extends JFrame {
                     if (spot.isSelected()){
                         spot.deselect();
                     } else if (!spot.isSelected()) {
-                        spot.select();
+                            spot.select();
                     }
 
                     if (spot.getPiece() != null){
                         moves = spot.getPiece().getPossibleMoves(board, spot.getXPos(), spot.getYPos());
-                        moves.forEach(n -> n.setBackground(Color.YELLOW));
+                        for (int i = moves.size() - 1; i >= 0; i--){
+                            if (!(spot.getPiece() instanceof King) && getKing(currentMove, board).isInCheck(board) && (!willMoveWork(spot, moves.get(i)))){
+                                moves.remove(i);
+                            }
+                        }
+                        moves.forEach(n -> n.setBorder(BorderFactory. createLineBorder(Color.YELLOW, 5)));
                         moves.forEach(n -> n.setValidSpot());
                     }
 
@@ -223,6 +238,29 @@ public class ChessGUI extends JFrame {
 
     public static String getCurrentMove(){
         return currentMove;
+    }
+
+    public  boolean willMoveWork(Spot current, Spot potential){
+        Piece temp = potential.getPiece();
+        if (potential.getPiece() != null){
+            potential.removePiece();
+        }
+        potential.setPiece(current.getPiece());
+        current.removePiece();
+        if (getKing(currentMove, board).isInCheck(board)){
+            current.setPiece(potential.getPiece());
+            potential.removePiece();
+            if(temp != null){
+                potential.setPiece(temp);
+            }
+            return false;
+        }
+        current.setPiece(potential.getPiece());
+        potential.removePiece();
+        if(temp != null){
+            potential.setPiece(temp);
+        }
+        return true;
     }
 
     public static King getKing(String color, Spot[][] b){
