@@ -11,6 +11,7 @@ public class WhiteTimer extends JLabel{
     private int wSecond, wMinute;
     private String wddSecond, wddMinute;
     private DecimalFormat dFormat = new DecimalFormat();
+    private static boolean isDone = false;
 
     public WhiteTimer(){
         setText("10:00");
@@ -43,6 +44,7 @@ public class WhiteTimer extends JLabel{
                 }
 
                 if (wSecond == 0 && wMinute == 0){
+                    isDone = true;
                     whiteTimer.stop();
                 }
             }
@@ -51,5 +53,9 @@ public class WhiteTimer extends JLabel{
 
     public static Timer getWhiteTimer(){
         return whiteTimer;
+    }
+
+    public static boolean isWhiteTimerDone(){
+        return isDone;
     }
 }

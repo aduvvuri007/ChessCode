@@ -11,6 +11,7 @@ public class BlackTimer extends JLabel{
     private int bSecond, bMinute;
     private String bddSecond, bddMinute;
     private DecimalFormat dFormat = new DecimalFormat();
+    private static boolean isDone = false;
 
     public BlackTimer(){
         setText("10:00");
@@ -44,6 +45,7 @@ public class BlackTimer extends JLabel{
 
                 if (bSecond == 0 && bMinute == 0){
                     blackTimer.stop();
+                    isDone = true;
                 }
             }
         });
@@ -51,5 +53,9 @@ public class BlackTimer extends JLabel{
 
     public static Timer getBlackTimer(){
         return blackTimer;
+    }
+
+    public static boolean isBlackTimerDone(){
+        return isDone;
     }
 }

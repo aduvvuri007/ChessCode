@@ -35,6 +35,41 @@ public class Knight extends Piece{
         }
 
         //Accounts for checks
+        if (ChessGUI.getKing(ChessGUI.getCurrentMove(), board).isInCheck(board) && possibleMoves.size() > 0) {
+            ArrayList<Spot> validMoves = new ArrayList<>();
+        
+            for (Spot move : possibleMoves) {
+                int startX = getCurrentX();
+                int startY = getCurrentY();
+                int targetX = move.getXPos();
+                int targetY = move.getYPos();
+                Piece targetPiece = board[targetX][targetY].getPiece();
+        
+                // Simulate the move
+                if (targetPiece != null){
+                    board[targetX][targetY].removePiece();
+                    board[targetX][targetY].setPiece(this);
+                    board[startX][startY].removePiece();
+                } else {
+                    board[targetX][targetY].setPiece(this);
+                    board[startX][startY].removePiece();
+                }
+        
+                if (!ChessGUI.getKing(ChessGUI.getCurrentMove(), board).isInCheck(board)) {
+                    validMoves.add(move);
+                }
+        
+                if (targetPiece != null){
+                    board[startX][startY].setPiece(this);
+                    board[targetX][targetY].removePiece();
+                    board[targetX][targetY].setPiece(targetPiece);
+                } else {
+                    board[startX][startY].setPiece(this);
+                    board[targetX][targetY].removePiece();
+                }
+            }
+            return validMoves;
+        }
 
         return possibleMoves;
     }

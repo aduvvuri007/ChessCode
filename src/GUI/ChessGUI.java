@@ -150,7 +150,17 @@ public class ChessGUI extends JFrame {
                                 }
                             }
                         }
+
+                        /*if (isCheckmate()){
+                            System.out.println(currentMove + " WINS!!!!");
+                        } else if (WhiteTimer.isWhiteTimerDone()){
+                            System.out.println("BLACK WINS!!!!");
+                        } else if (BlackTimer.isBlackTimerDone()){
+                            System.out.println("WHITE WINS!!!!");
+                        }*/
+
                         changeMove();
+                        
                         if (getKing(currentMove, board).isInCheck(board)){
                             board[getKing(currentMove, board).getCurrentX()][getKing(currentMove, board).getCurrentY()].setCheck();
                         }
@@ -181,11 +191,6 @@ public class ChessGUI extends JFrame {
 
                     if (spot.getPiece() != null){
                         moves = spot.getPiece().getPossibleMoves(board, spot.getXPos(), spot.getYPos());
-                        for (int i = moves.size() - 1; i >= 0; i--){
-                            if (!(spot.getPiece() instanceof King) && getKing(currentMove, board).isInCheck(board) && (!willMoveWork(spot, moves.get(i)))){
-                                moves.remove(i);
-                            }
-                        }
                         moves.forEach(n -> n.setBorder(BorderFactory. createLineBorder(Color.YELLOW, 5)));
                         moves.forEach(n -> n.setValidSpot());
                     }
@@ -240,29 +245,6 @@ public class ChessGUI extends JFrame {
         return currentMove;
     }
 
-    public  boolean willMoveWork(Spot current, Spot potential){
-        Piece temp = potential.getPiece();
-        if (potential.getPiece() != null){
-            potential.removePiece();
-        }
-        potential.setPiece(current.getPiece());
-        current.removePiece();
-        if (getKing(currentMove, board).isInCheck(board)){
-            current.setPiece(potential.getPiece());
-            potential.removePiece();
-            if(temp != null){
-                potential.setPiece(temp);
-            }
-            return false;
-        }
-        current.setPiece(potential.getPiece());
-        potential.removePiece();
-        if(temp != null){
-            potential.setPiece(temp);
-        }
-        return true;
-    }
-
     public static King getKing(String color, Spot[][] b){
         for(int i = 0; i < b.length; i++){
             for (int j = 0; j < b[0].length; j++){
@@ -276,6 +258,21 @@ public class ChessGUI extends JFrame {
         } else {
             return bKing;
         }
+    }
+
+    public static boolean isCheckmate(){
+        for(int i = 0; i < board.length; i++){
+            for (int j = 0; j < board[0].length; j++){
+                if (board[i][j].getPiece() != null){
+                    if (board[i][j].getPiece().getPossibleMoves(board, i, j).size() == 0){
+                        continue;
+                    } else {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     public static void main(String[] args){

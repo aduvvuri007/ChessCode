@@ -2,6 +2,8 @@ package Pieces;
 import Game.Spot;
 import java.util.ArrayList;
 
+import GUI.ChessGUI;
+
 
 /**
  * This is the piece abstract class. It is not an actual object but
@@ -37,6 +39,28 @@ public abstract class Piece implements Cloneable{
         moveCounter++;
         setCurrentX(endSpot.getXPos());
         setCurrentY(endSpot.getYPos());
+        for(int i = 0; i < ChessGUI.getCurrentBoardState().length; i++){
+            for (int j = 0; j < ChessGUI.getCurrentBoardState()[0].length; j++){
+                if (ChessGUI.getCurrentBoardState()[i][j].getPiece() != null && ChessGUI.getCurrentBoardState()[i][j].hasJustMoved()){
+                    ChessGUI.getCurrentBoardState()[i][j].removeJustMoved();
+                }
+            }
+        }
+        endSpot.setJustMoved();
+        if (endSpot.isEnPassantMove()){
+            startSpot.removePiece();
+            endSpot.setPiece(this);
+            if(ChessGUI.getCurrentMove().equals("WHITE")){
+                ChessGUI.getCurrentBoardState()[endSpot.getXPos() + 1 ][endSpot.getYPos()].removePiece();
+                ChessGUI.getCurrentBoardState()[endSpot.getXPos() + 1 ][endSpot.getYPos()].select();
+                ChessGUI.getCurrentBoardState()[endSpot.getXPos() + 1 ][endSpot.getYPos()].deselect();
+            } else if (ChessGUI.getCurrentMove().equals("BLACK")){
+                ChessGUI.getCurrentBoardState()[endSpot.getXPos() - 1 ][endSpot.getYPos()].removePiece();
+                ChessGUI.getCurrentBoardState()[endSpot.getXPos() - 1 ][endSpot.getYPos()].select();
+                ChessGUI.getCurrentBoardState()[endSpot.getXPos() - 1 ][endSpot.getYPos()].deselect();
+            }
+            endSpot.removeEnPassantMove();
+        }
         if (endSpot.getPiece() != null){
             endSpot.removePiece();
         }

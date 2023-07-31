@@ -11,7 +11,6 @@ public class Pawn extends Piece {
      * It can capture a piece diagonally and with en passant
      */
     
-    private int moveCounter = 0;
     private String color;
     
     public Pawn(String pieceID, String pieceColor, String imageID, int startX, int startY){
@@ -54,6 +53,10 @@ public class Pawn extends Piece {
                 }
     
                 //NEed to rewrite en passant (will need to account for king being in check)
+                if (canCaptureWithEnPassant(board, x, y) != null){
+                    possibleMoves.add(canCaptureWithEnPassant(board, x, y));
+                    canCaptureWithEnPassant(board, x, y).setEnPassantMove();
+                } 
     
             } else if(getPieceColor().equals("WHITE")){
                 //Moving straight up for first move only (will have to add if king will be in check or not)
@@ -85,23 +88,70 @@ public class Pawn extends Piece {
                 }
     
                 //Need to rewrite En Passant Code 
+                if (canCaptureWithEnPassant(board, x, y) != null){
+                    possibleMoves.add(canCaptureWithEnPassant(board, x, y));
+                    canCaptureWithEnPassant(board, x, y).setEnPassantMove();
+                } 
             }
         } else {
             return possibleMoves;
         }
 
+        if (ChessGUI.getKing(ChessGUI.getCurrentMove(), board).isInCheck(board) && possibleMoves.size() > 0) {
+            ArrayList<Spot> validMoves = new ArrayList<>();
+        
+            for (Spot move : possibleMoves) {
+                int startX = getCurrentX();
+                int startY = getCurrentY();
+                int targetX = move.getXPos();
+                int targetY = move.getYPos();
+                Piece targetPiece = board[targetX][targetY].getPiece();
+        
+                // Simulate the move
+                if (targetPiece != null){
+                    board[targetX][targetY].removePiece();
+                    board[targetX][targetY].setPiece(this);
+                    board[startX][startY].removePiece();
+                } else {
+                    board[targetX][targetY].setPiece(this);
+                    board[startX][startY].removePiece();
+                }
+        
+                if (!ChessGUI.getKing(ChessGUI.getCurrentMove(), board).isInCheck(board)) {
+                    validMoves.add(move);
+                }
+        
+                if (targetPiece != null){
+                    board[startX][startY].setPiece(this);
+                    board[targetX][targetY].removePiece();
+                    board[targetX][targetY].setPiece(targetPiece);
+                } else {
+                    board[startX][startY].setPiece(this);
+                    board[targetX][targetY].removePiece();
+                }
+            }
+            return validMoves;
+        }
+
         return possibleMoves;
     }
 
-    //Mainly used for en passant
-    /*public boolean canBeCapturedWithEnPassant(Spot[][] boardState, int currentX, int currentY){
-        if (((Pawn) boardState[currentX][currentY].getPiece()).getMoveCounter() == 1 && Math.abs(currentY - boardState[currentX][currentY].getPiece().getStartY()) == 2 && currentX == boardState[currentX][currentY].getPiece().getStartX() && !ChessGUI.getPreviousBoardState()[currentX][currentY].equals(boardState[currentX][currentY])){
-            return true;
+    public Spot canCaptureWithEnPassant(Spot[][] board, int x, int y){
+        if(ChessGUI.getCurrentMove().equals("WHITE") && x == 3){
+            if((y < 7 && board[3][y+1].getPiece() instanceof Pawn && board[3][y+1].hasJustMoved() && board[3][y+1].getPiece().getPieceColor().equals("BLACK") && board[3][y+1].getPiece().getMoveCounter() == 1)){
+                return board[2][y+1];
+            } 
+            if (y > 0 && board[3][y-1].getPiece() instanceof Pawn && board[3][y-1].hasJustMoved() && board[3][y-1].getPiece().getPieceColor().equals("BLACK") && board[3][y-1].getPiece().getMoveCounter() == 1){
+                return board[2][y-1];
+            }
+        } else if (ChessGUI.getCurrentMove().equals("BLACK") && x == 4) {
+            if((y < 7 && board[4][y+1].getPiece() instanceof Pawn && board[4][y+1].hasJustMoved() && board[4][y+1].getPiece().getPieceColor().equals("WHITE") && board[4][y+1].getPiece().getMoveCounter() == 1)){
+                return board[5][y+1];
+            }
+            if ((y > 0 && board[4][y-1].getPiece() instanceof Pawn && board[4][y-1].hasJustMoved() && board[4][y-1].getPiece().getPieceColor().equals("WHITE") && board[4][y-1].getPiece().getMoveCounter() == 1)){
+                return board[5][y-1];
+            }
         }
-        return false;
-    } */
-
-    public int getMoveCounter(){
-        return moveCounter;
+        return null;
     }
 }
