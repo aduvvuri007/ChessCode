@@ -81,7 +81,7 @@ public class Bishop extends Piece{
         }
 
         //Accounts for checks
-        if (ChessGUI.getKing(ChessGUI.getCurrentMove(), board).isInCheck(board) && possibleMoves.size() > 0) {
+        if (possibleMoves.size() > 0) {
             ArrayList<Spot> validMoves = new ArrayList<>();
         
             for (Spot move : possibleMoves) {
