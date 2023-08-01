@@ -199,12 +199,12 @@ public class ChessGUI extends JFrame {
                                     moves.get(i).removeValidSpot();
                                     moves.get(i).removeShortCastleMove();
                                     moves.get(i).setBorder(null);
-                                    //moves.remove(i);
+                                    moves.remove(i);
                                 } else if (moves.get(i).isLongCastleMove() && !board[moves.get(i).getXPos()][moves.get(i).getYPos() + 1].isValidSpot()){
                                     moves.get(i).removeValidSpot();
                                     moves.get(i).removeLongCastleMove();
                                     moves.get(i).setBorder(null);
-                                    //moves.remove(i);
+                                    moves.remove(i);
                                 }
                             }
                         }
