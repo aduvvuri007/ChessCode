@@ -193,18 +193,21 @@ public class ChessGUI extends JFrame {
                         moves = spot.getPiece().getPossibleMoves(board, spot.getXPos(), spot.getYPos());
                         moves.forEach(n -> n.setBorder(BorderFactory. createLineBorder(Color.YELLOW, 5)));
                         moves.forEach(n -> n.setValidSpot());
-                        /*for (int i = moves.size() - 1; i >= 0; i--){
-                            if (moves.get(i).isShortCastleMove() && !board[moves.get(i).getXPos()][moves.get(i).getYPos() + 1].isValidSpot()){
-                                moves.get(i).removeValidSpot();
-                                moves.get(i).setBorder(null);
-                                moves.remove(i);
+                        if (spot.getPiece() instanceof King){
+                            for (int i = moves.size() - 1; i >= 0; i--){
+                                if (moves.get(i).isShortCastleMove() && !board[moves.get(i).getXPos()][moves.get(i).getYPos() - 1].isValidSpot()){
+                                    moves.get(i).removeValidSpot();
+                                    moves.get(i).removeShortCastleMove();
+                                    moves.get(i).setBorder(null);
+                                    //moves.remove(i);
+                                } else if (moves.get(i).isLongCastleMove() && !board[moves.get(i).getXPos()][moves.get(i).getYPos() + 1].isValidSpot()){
+                                    moves.get(i).removeValidSpot();
+                                    moves.get(i).removeLongCastleMove();
+                                    moves.get(i).setBorder(null);
+                                    //moves.remove(i);
+                                }
                             }
-                            if (moves.get(i).isLongCastleMove() && !board[moves.get(i).getXPos()][moves.get(i).getYPos() - 1].isValidSpot()){
-                                moves.get(i).removeValidSpot();
-                                moves.get(i).setBorder(null);
-                                moves.remove(i);
-                            }
-                        }*/
+                        }
                     }
 
                     lastClicked = spot;
