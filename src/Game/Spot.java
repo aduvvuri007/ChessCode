@@ -22,6 +22,7 @@ public class Spot extends JPanel implements Cloneable{
     private boolean longCastleMove = false;
     private boolean isEnPassantMove = false;
     private boolean justMoved = false;
+    private boolean promotionMove = false;
     private boolean isValidSpot, isCheck, isSelected;
     private String homeDirectory = System.getProperty("user.home");
 
@@ -188,5 +189,17 @@ public class Spot extends JPanel implements Cloneable{
 
     public boolean hasJustMoved(){
         return justMoved;
+    }
+
+    public void setPromotionMove(){
+        promotionMove = true;
+    }
+
+    public void removePromotionMove(){
+        promotionMove = false;
+    }
+
+    public boolean isPromotionMove(){
+        return promotionMove;
     }
 }

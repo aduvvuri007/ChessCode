@@ -57,6 +57,13 @@ public class Pawn extends Piece {
                     possibleMoves.add(canCaptureWithEnPassant(board, x, y));
                     canCaptureWithEnPassant(board, x, y).setEnPassantMove();
                 } 
+
+                for (Spot moves : possibleMoves){
+                    if (moves.getXPos() == 7){
+                        moves.setPromotionMove();
+                    }
+                }
+            
     
             } else if(getPieceColor().equals("WHITE")){
                 //Moving straight up for first move only (will have to add if king will be in check or not)
@@ -92,6 +99,12 @@ public class Pawn extends Piece {
                     possibleMoves.add(canCaptureWithEnPassant(board, x, y));
                     canCaptureWithEnPassant(board, x, y).setEnPassantMove();
                 } 
+
+                for (Spot moves : possibleMoves){
+                    if (moves.getXPos() == 0){
+                        moves.setPromotionMove();
+                    }
+                }
             }
         } else {
             return possibleMoves;

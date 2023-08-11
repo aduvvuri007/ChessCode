@@ -5,6 +5,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.awt.*;
 import Game.Spot;
 import Game.BlackTimer;
@@ -57,6 +58,8 @@ public class ChessGUI extends JFrame {
 
     private static String currentMove = "WHITE";
 
+    private boolean mainMouseHandlerEnabled = true;
+
     public ChessGUI(){
         super("Chess");
         
@@ -64,6 +67,33 @@ public class ChessGUI extends JFrame {
         panel.setLayout(new BorderLayout());
         panel.setBorder(new EmptyBorder(0, 5, 0, 5));
         JPanel gameboard = new JPanel(new GridLayout(8,8));
+        Popup pwhite;
+        Popup pblack;
+        PopupFactory whitepf = new PopupFactory();
+        PopupFactory blackpf = new PopupFactory();
+        JPanel whitePromotionPanel = new JPanel(new GridLayout(1,4));
+        Spot[] whitePromotionPieces = new Spot[4];
+        JPanel blackPromotionPanel = new JPanel(new GridLayout(1,4));
+        Spot[] blackPromotionPieces = new Spot[4];
+
+        whitePromotionPieces[0] = new Spot(new GridLayout(1, 1), 0, 0, new Queen("WQ", "WHITE", "White_Queen.png", 0, 0));
+        whitePromotionPieces[1] = new Spot(new GridLayout(1, 1), 0, 0, new Rook("WR1", "WHITE", "White_Rook.png", 0, 0));
+        whitePromotionPieces[2] = new Spot(new GridLayout(1, 1), 0, 0,new Knight("WKn1", "WHITE", "White_Knight.png", 0, 0));
+        whitePromotionPieces[3] = new Spot(new GridLayout(1, 1), 0, 0, new Bishop("WB1", "WHITE", "White_Bishop.png", 0, 0));
+        for (int i = 0; i < whitePromotionPieces.length; i++){
+            whitePromotionPanel.add(whitePromotionPieces[i]);
+        }
+        pwhite = whitepf.getPopup(panel, whitePromotionPanel, 1000, 800);
+
+        blackPromotionPieces[0] = new Spot(new GridLayout(1, 1), 0, 0, new Queen("BQ", "BLACK", "Black_Queen.png", 0, 0));
+        blackPromotionPieces[1] = new Spot(new GridLayout(1, 1), 0, 0, new Rook("BR1", "BLACK", "Black_Rook.png", 0, 0));
+        blackPromotionPieces[2] = new Spot(new GridLayout(1, 1), 0, 0, new Knight("BKn1", "BLACK", "Black_Knight.png", 0, 0));
+        blackPromotionPieces[3] = new Spot(new GridLayout(1, 1), 0, 0, new Bishop("BB1", "BLACK", "Black_Bishop.png", 0, 0));
+        for (int i = 0; i < blackPromotionPieces.length; i++){
+            blackPromotionPanel.add(blackPromotionPieces[i]);
+        }
+        pblack = blackpf.getPopup(panel, blackPromotionPanel, 1100, 900);
+        
 
         wKing = new King("WK", "WHITE", "White_King.png", 7, 4);
         bKing = new King("BK", "BLACK", "Black_King.png", 0, 4);
@@ -124,6 +154,9 @@ public class ChessGUI extends JFrame {
             private Spot lastClicked;
             private ArrayList<Spot> moves;
             public void mouseClicked(MouseEvent e) {
+                if (!mainMouseHandlerEnabled) {
+                    return;
+                }
                 if (lastClicked != null && lastClicked.isSelected()) {
                     lastClicked.deselect();
                     Spot s = (Spot) e.getSource();
@@ -140,23 +173,88 @@ public class ChessGUI extends JFrame {
                             board[lastClicked.getXPos()][lastClicked.getYPos() - 4].deselect();
                             lastClicked.getPiece().move(board[lastClicked.getXPos()][lastClicked.getYPos()], s);
                             s.removeLongCastleMove();
-                        } else{
+                        } else if (lastClicked.getPiece() instanceof Pawn && s.isPromotionMove()){
+                            if (currentMove.equals("WHITE")){
+                                lastClicked.setJustMoved();
+                                mainMouseHandlerEnabled = false;
+                                pwhite.show();
+                                MouseAdapter whitePromotionMouseHandler = new MouseAdapter(){
+                                    public void mouseClicked(MouseEvent e) {
+                                        Spot sp = (Spot) e.getSource();
+                                        if (Arrays.asList(whitePromotionPieces).contains(sp)){
+                                            for (int i = 0; i < board.length; i++) {
+                                                    if(board[1][i].hasJustMoved()){
+                                                        board[1][i].removePiece();
+                                                        board[1][i].removeJustMoved();
+                                                        board[1][i].select();
+                                                        board[1][i].deselect();
+                                                    }
+                                            }
+                                            s.removePiece();
+                                            s.setPiece(sp.getPiece());
+                                            sp.getPiece().setCurrentX(s.getXPos());
+                                            sp.getPiece().setCurrentY(s.getYPos());
+                                            pwhite.hide();
+                                            mainMouseHandlerEnabled = true;
+                                        }
+                                    }
+                                };
+                                for (int i = 0; i < whitePromotionPieces.length; i++) {
+                                    whitePromotionPieces[i].addMouseListener(whitePromotionMouseHandler);
+                                }
+                            } else if (currentMove.equals("BLACK")){
+                                mainMouseHandlerEnabled = false;
+                                pblack.show();
+                                MouseAdapter blackPromotionMouseHandler = new MouseAdapter(){
+                                    public void mouseClicked(MouseEvent e) {
+                                        Spot sp = (Spot) e.getSource();
+                                        if (Arrays.asList(blackPromotionPieces).contains(sp)){
+                                            for (int i = 0; i < board.length; i++) {
+                                                if(board[6][i].hasJustMoved()){
+                                                    board[6][i].removePiece();
+                                                    board[6][i].removeJustMoved();
+                                                    board[6][i].select();
+                                                    board[6][i].deselect();
+                                                }
+                                            }
+                                            s.removePiece();
+                                            s.setPiece(sp.getPiece());
+                                            sp.getPiece().setCurrentX(s.getXPos());
+                                            sp.getPiece().setCurrentY(s.getYPos());
+                                            pblack.hide();
+                                            mainMouseHandlerEnabled = true;
+                                        }
+                                    }
+                                };
+                                for (int i = 0; i < whitePromotionPieces.length; i++) {
+                                    blackPromotionPieces[i].addMouseListener(blackPromotionMouseHandler);
+                                }
+                            }
+                            s.removePromotionMove();
+                        } 
+                        else{
                             lastClicked.getPiece().move(board[lastClicked.getXPos()][lastClicked.getYPos()], s);
                             for(int i = 0; i < board.length; i++){
                                 for (int j = 0; j < board[0].length; j++){
                                     if (board[i][j].isInCheck()){
                                         board[i][j].removeCheck();
                                     }
+                                    if (board[i][j].isPromotionMove()){
+                                        board[i][j].removePromotionMove();
+                                    }                                
                                 }
                             }
                         }
 
                         /*if (isCheckmate()){
                             System.out.println(currentMove + " WINS!!!!");
+                            return;
                         } else if (WhiteTimer.isWhiteTimerDone()){
                             System.out.println("BLACK WINS!!!!");
+                            return;
                         } else if (BlackTimer.isBlackTimerDone()){
                             System.out.println("WHITE WINS!!!!");
+                            return;
                         }*/
 
                         changeMove();
@@ -292,7 +390,7 @@ public class ChessGUI extends JFrame {
 
     public static void main(String[] args){
         ChessGUI window = new ChessGUI();
-        window.setBounds(1600, 1200, 1600, 1200);
+        window.setBounds(1200, 500, 1600, 1200);
         window.setResizable(false);
         window.setVisible(true); 
         BlackTimer.getBlackTimer().stop();
