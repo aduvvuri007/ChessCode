@@ -175,6 +175,13 @@ public class ChessGUI extends JFrame {
                             s.removeLongCastleMove();
                         } else if (lastClicked.getPiece() instanceof Pawn && s.isPromotionMove()){
                             if (currentMove.equals("WHITE")){
+                                for(int i = 0; i < board.length; i++){
+                                    for (int j = 0; j < board[0].length; j++){
+                                        if (board[i][j].getPiece() != null && board[i][j].hasJustMoved()){
+                                            board[i][j].removeJustMoved();
+                                        }
+                                    }
+                                }
                                 lastClicked.setJustMoved();
                                 mainMouseHandlerEnabled = false;
                                 pwhite.show();
@@ -204,6 +211,16 @@ public class ChessGUI extends JFrame {
                                 }
                             } else if (currentMove.equals("BLACK")){
                                 mainMouseHandlerEnabled = false;
+                                if (currentMove.equals("WHITE")){
+                                    for(int i = 0; i < board.length; i++){
+                                        for (int j = 0; j < board[0].length; j++){
+                                            if (board[i][j].getPiece() != null && board[i][j].hasJustMoved()){
+                                                board[i][j].removeJustMoved();
+                                            }
+                                        }
+                                    }
+                                }
+                                lastClicked.setJustMoved();
                                 pblack.show();
                                 MouseAdapter blackPromotionMouseHandler = new MouseAdapter(){
                                     public void mouseClicked(MouseEvent e) {
