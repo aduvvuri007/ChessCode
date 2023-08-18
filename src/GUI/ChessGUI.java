@@ -158,6 +158,19 @@ public class ChessGUI extends JFrame {
                     return;
                 }
                 if (lastClicked != null && lastClicked.isSelected()) {
+                    if (WhiteTimer.isWhiteTimerDone()){
+                        JDialog popup = createPopup("Black Wins On Time!", "The game has ended. Exit Out of the Window!");
+                        popup.setVisible(true);
+                        mainMouseHandlerEnabled = false;
+                        BlackTimer.getBlackTimer().stop();
+                        return;
+                    } else if (BlackTimer.isBlackTimerDone()){
+                        JDialog popup = createPopup("White Wins On Time!", "The game has ended. Exit Out of the Window!");
+                        popup.setVisible(true);
+                        mainMouseHandlerEnabled = false;
+                        WhiteTimer.getWhiteTimer().stop();
+                        return;
+                    }
                     lastClicked.deselect();
                     Spot s = (Spot) e.getSource();
                     if (s.isValidSpot()){
@@ -262,19 +275,34 @@ public class ChessGUI extends JFrame {
                                 }
                             }
                         }
+                        
+                        changeMove();
 
-                        /*if (isCheckmate()){
-                            System.out.println(currentMove + " WINS!!!!");
-                            return;
-                        } else if (WhiteTimer.isWhiteTimerDone()){
-                            System.out.println("BLACK WINS!!!!");
+                        if (WhiteTimer.isWhiteTimerDone()){
+                            JDialog popup = createPopup("Black Wins On Time!", "The game has ended. Exit Out of the Window!");
+                            popup.setVisible(true);
+                            mainMouseHandlerEnabled = false;
+                            BlackTimer.getBlackTimer().stop();
                             return;
                         } else if (BlackTimer.isBlackTimerDone()){
-                            System.out.println("WHITE WINS!!!!");
+                            JDialog popup = createPopup("White Wins On Time!", "The game has ended. Exit Out of the Window!");
+                            popup.setVisible(true);
+                            mainMouseHandlerEnabled = false;
+                            WhiteTimer.getWhiteTimer().stop();
                             return;
-                        }*/
+                        }
 
-                        changeMove();
+                        if (isCheckmate()){
+                            JDialog popup = createPopup("Checkmate!", "The game has ended. Exit Out of the Window!");
+                            popup.setVisible(true);
+                            mainMouseHandlerEnabled = false;
+                            if (currentMove.equals("WHITE")){
+                                WhiteTimer.getWhiteTimer().stop();
+                            } else if (currentMove.equals("BLACK")){
+                                BlackTimer.getBlackTimer().stop();
+                            }
+                            return;
+                        }
 
                         if (getKing(currentMove, board).isInCheck(board)){
                             board[getKing(currentMove, board).getCurrentX()][getKing(currentMove, board).getCurrentY()].setCheck();
@@ -391,18 +419,39 @@ public class ChessGUI extends JFrame {
     }
 
     public static boolean isCheckmate(){
-        for(int i = 0; i < board.length; i++){
-            for (int j = 0; j < board[0].length; j++){
-                if (board[i][j].getPiece() != null){
-                    if (board[i][j].getPiece().getPossibleMoves(board, i, j).size() == 0){
-                        continue;
-                    } else {
-                        return false;
+                for(int i = 0; i < board.length; i++){
+                    for (int j = 0; j < board[0].length; j++){
+                        if (board[i][j].getPiece() != null && board[i][j].getPiece().getPossibleMoves(board, i, j).size() == 0){
+                            continue;
+                        } else if (board[i][j].getPiece() != null && board[i][j].getPiece().getPossibleMoves(board, i, j).size() > 0){
+                            return false;
+                        }
                     }
-                }
-            }
-        }
+                }                       
         return true;
+    }
+
+    private JDialog createPopup(String title, String message) {
+        JDialog dialog = new JDialog();
+        JPanel panel = new JPanel();
+        
+        JLabel titleLabel = new JLabel(title);
+        JLabel messageLabel = new JLabel(message);
+
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 32));
+        messageLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+        
+        panel.add(titleLabel);
+        panel.add(messageLabel);
+
+        panel.setPreferredSize(new Dimension(400, 300));
+        
+        dialog.getContentPane().add(panel);
+        dialog.pack();
+        dialog.setLocationRelativeTo(null); // Center on screen
+        dialog.setModal(true);
+        
+        return dialog;
     }
 
     public static void main(String[] args){
