@@ -10,7 +10,7 @@ public class BlackTimer extends JLabel{
     public static Timer blackTimer;
     private int bSecond, bMinute;
     private String bddSecond, bddMinute;
-    private DecimalFormat dFormat = new DecimalFormat();
+    private DecimalFormat dFormat = new DecimalFormat("00");
     private static boolean isDone = false;
 
     public BlackTimer(){

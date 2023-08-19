@@ -10,7 +10,7 @@ public class WhiteTimer extends JLabel{
     public static Timer whiteTimer;
     private int wSecond, wMinute;
     private String wddSecond, wddMinute;
-    private DecimalFormat dFormat = new DecimalFormat();
+    private DecimalFormat dFormat = new DecimalFormat("00");
     private static boolean isDone = false;
 
     public WhiteTimer(){

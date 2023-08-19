@@ -279,28 +279,33 @@ public class ChessGUI extends JFrame {
                         changeMove();
 
                         if (WhiteTimer.isWhiteTimerDone()){
+                            BlackTimer.getBlackTimer().stop();
                             JDialog popup = createPopup("Black Wins On Time!", "The game has ended. Exit Out of the Window!");
                             popup.setVisible(true);
                             mainMouseHandlerEnabled = false;
-                            BlackTimer.getBlackTimer().stop();
                             return;
                         } else if (BlackTimer.isBlackTimerDone()){
+                            WhiteTimer.getWhiteTimer().stop();
                             JDialog popup = createPopup("White Wins On Time!", "The game has ended. Exit Out of the Window!");
                             popup.setVisible(true);
                             mainMouseHandlerEnabled = false;
-                            WhiteTimer.getWhiteTimer().stop();
                             return;
                         }
 
                         if (isCheckmate()){
+                            if (currentMove.equals("WHITE")){
+                                BlackTimer.getBlackTimer().stop();
+                            } else if (currentMove.equals("BLACK")){
+                                WhiteTimer.getWhiteTimer().stop();
+                            }
+                            for(int i = 0; i < board.length; i++){
+                                for (int j = 0; j < board[0].length; j++){
+                                    board[i][j].setBorder(null);
+                                }
+                            }
                             JDialog popup = createPopup("Checkmate!", "The game has ended. Exit Out of the Window!");
                             popup.setVisible(true);
                             mainMouseHandlerEnabled = false;
-                            if (currentMove.equals("WHITE")){
-                                WhiteTimer.getWhiteTimer().stop();
-                            } else if (currentMove.equals("BLACK")){
-                                BlackTimer.getBlackTimer().stop();
-                            }
                             return;
                         }
 
